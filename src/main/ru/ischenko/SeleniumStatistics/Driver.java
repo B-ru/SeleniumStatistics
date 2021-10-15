@@ -5,15 +5,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import static main.ru.ischenko.SeleniumStatistics.Defenitions.*;
+import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
 public class Driver {
     private WebDriver driver;
     public Driver( String path ){
         System.setProperty( "webdriver.gecko.driver", path );
         WebDriver driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().window().setSize(new Dimension(700,10000));
-        driver.manage().window().setPosition(new Point(0,-10000));
+        driver.manage().window().setSize(new Dimension(1024,20000));
+        driver.manage().window().setPosition(new Point(0,-20000));
         setDriver( driver );
     }
     public void Login( String[ ] args ){
