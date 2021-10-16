@@ -13,10 +13,10 @@ public class Definitions {
     final static String MESSAGES_LIST_XPATH     = "//div[contains(@autoid,'_lvv_9')]/div";
     final static String FORMAT                  = "%-33.33s %-29.29s %16.16s\n";
     final static String DATE_OUTPUT_FORMAT      = "%10.10s %5.5s";
-    final static String TODAY_TIME_FORMAT       = "([0-9]{1,2}:[0-9]{2})$";
+    final static String RECENT_TIME_FORMAT      = "([0-9]{1,2}:[0-9]{2})$";
     final static String FOUR_DAYS_TIME_FORMAT   = "^(Пн|Вт|Ср|Чт|Пт|Сб|Вс) ([0-9]{1,2}:[0-9]{2})$";
-    final static String ONE_WEEK_TIME_FORMAT    = "^(Пн|Вт|Ср|Чт|Пт|Сб|Вс) ([0-9]{2}.[0-9]{2})$";
-    final static String MORE_THAN_WEEK_FORMAT   = "^(\\d{2}.\\d{2}.\\d{4})$";
+    final static String WEEK_TIME_FORMAT        = "^(Пн|Вт|Ср|Чт|Пт|Сб|Вс) ([0-9]{2}.[0-9]{2})$";
+    final static String MONTH_TIME_FORMAT       = "^(\\d{2}.\\d{2}.\\d{4})$";
     final static String ERROR_FILLER            = "?";
     final static String AUTHOR_XPATH            = "//div[contains(@id,'%s')]//span[contains(@autoid,'_lvv_5')]";
     final static String THEME_XPATH             = "//div[contains(@id,'%s')]//span[contains(@autoid,'_lvv_6')]";

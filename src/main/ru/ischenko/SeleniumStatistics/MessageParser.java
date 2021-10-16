@@ -20,11 +20,11 @@ public class MessageParser {
     public String getTheme()    {
         return getMessage().findElement(By.xpath(String.format(THEME_XPATH, getMessage().getAttribute("id")))).getText();
     }
-    public String getDateTimeStamp() throws Exception{
+    public String getDateTimeStamp() throws Exception{  //TODO: must be a better way: program compiles pattern on every message parsing, while it has to do it once
         String messageTimeStamp = getMessage().findElement(By.xpath(String.format(TIMESTAMP_XPATH,getMessage().getAttribute("id")))).getText();
         LocalDate currentDate = LocalDate.now();
-        if( messageTimeStamp.matches(TODAY_TIME_FORMAT) ) {
-            return String.format(DATE_OUTPUT_FORMAT,currentDate, messageTimeStamp );
+        if( messageTimeStamp.matches(RECENT_TIME_FORMAT) ) {
+            return String.format(DATE_OUTPUT_FORMAT, currentDate, messageTimeStamp );
         } else if (messageTimeStamp.matches(FOUR_DAYS_TIME_FORMAT)){
             Pattern pattern = Pattern.compile(FOUR_DAYS_TIME_FORMAT);
             Matcher matcher = pattern.matcher(messageTimeStamp);
@@ -35,16 +35,16 @@ public class MessageParser {
                 int deltaDays = ( deltaWeekDays < 0? deltaWeekDays + 7 : deltaWeekDays );
                 return String.format(DATE_OUTPUT_FORMAT, currentDate.minusDays(deltaDays), matcher.group(2) );
             }
-        } else if (messageTimeStamp.matches(ONE_WEEK_TIME_FORMAT)){
-            Pattern pattern = Pattern.compile(ONE_WEEK_TIME_FORMAT);
+        } else if (messageTimeStamp.matches(WEEK_TIME_FORMAT)){
+            Pattern pattern = Pattern.compile(WEEK_TIME_FORMAT);
             Matcher matcher = pattern.matcher(messageTimeStamp);
             if (matcher.find()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate messageDate = LocalDate.parse(matcher.group(2) + "." + currentDate.getYear(), formatter);
                 return String.format(DATE_OUTPUT_FORMAT, messageDate,getTimeStampFromMessageBody());
             }
-        } else if (messageTimeStamp.matches(MORE_THAN_WEEK_FORMAT)){
-            Pattern pattern = Pattern.compile(MORE_THAN_WEEK_FORMAT);
+        } else if (messageTimeStamp.matches(MONTH_TIME_FORMAT)){
+            Pattern pattern = Pattern.compile(MONTH_TIME_FORMAT);
             Matcher matcher = pattern.matcher(messageTimeStamp);
             if (matcher.find()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -60,7 +60,7 @@ public class MessageParser {
         WebElement grandContainer = getMessage().findElement(By.xpath(GRAND_PARENT_XPATH));
         String timeStamp = grandContainer.findElement(By.xpath(INNER_TIME_DATE_XPATH)).getText();
         messageSelectorClick();
-        Pattern pattern = Pattern.compile(TODAY_TIME_FORMAT);
+        Pattern pattern = Pattern.compile(RECENT_TIME_FORMAT);
         Matcher matcher = pattern.matcher(timeStamp);
         if (matcher.find()) return matcher.group(1);
         else                return ERROR_FILLER;
@@ -77,8 +77,8 @@ public class MessageParser {
         }
         catch (Exception e)
         {
-            System.err.println(e.getStackTrace());
-        };
+            System.err.println(e.getMessage());
+        }
         return null;
     }
 }

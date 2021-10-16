@@ -10,7 +10,9 @@ public class MailMessages {
     public List<WebElement> getMails()              { return mails;         }
     public void setMails(List<WebElement> mails)    { this.mails = mails;   }
     public void Print(){
-        System.out.printf(FORMAT, "автор", "тема", "дата       время");
-        mails.forEach( message -> { if( !message.getAttribute("id").isEmpty( ) ) System.out.print( new MessageParser( message ) ); } );
+        mails.forEach( message -> {
+            if( !message.getAttribute("id").isEmpty( ) )
+                System.out.print( new MessageParser( message ) );
+        });
     }
 }
