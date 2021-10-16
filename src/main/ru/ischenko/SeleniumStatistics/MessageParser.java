@@ -15,13 +15,13 @@ public class MessageParser {
         setMessage(message);
     }
     public String getAuthor()   {
-        return getMessage().findElement(By.xpath(String.format("//div[contains(@id,'%s')]//span[contains(@autoid,'_lvv_5')]", getMessage().getAttribute("id")))).getText();
+        return getMessage().findElement(By.xpath(String.format(AUTHOR_XPATH, getMessage().getAttribute("id")))).getText();
     }
     public String getTheme()    {
-        return getMessage().findElement(By.xpath(String.format("//div[contains(@id,'%s')]//span[contains(@autoid,'_lvv_6')]", getMessage().getAttribute("id")))).getText();
+        return getMessage().findElement(By.xpath(String.format(THEME_XPATH, getMessage().getAttribute("id")))).getText();
     }
-    public String getTimeStamp() throws Exception{
-        String messageTimeStamp = getMessage().findElement(By.xpath(String.format("//div[contains(@id,'%s')]/div/div/span[text()]",getMessage().getAttribute("id")))).getText();
+    public String getDateTimeStamp() throws Exception{
+        String messageTimeStamp = getMessage().findElement(By.xpath(String.format(TIMESTAMP_XPATH,getMessage().getAttribute("id")))).getText();
         LocalDate currentDate = LocalDate.now();
         if( messageTimeStamp.matches(TODAY_TIME_FORMAT) ) {
             return String.format(DATE_OUTPUT_FORMAT,currentDate, messageTimeStamp );
@@ -57,23 +57,23 @@ public class MessageParser {
     public String getTimeStampFromMessageBody() throws Exception{
         messageSelectorClick();
         Thread.sleep(CLICK_DELAY);
-        WebElement grandContainer = getMessage().findElement(By.xpath("./../../../../../../../../../../../../.."));
-        String timeStamp = grandContainer.findElement(By.xpath("//div[contains(@class,'_rp_f8')]/div/span[text()]")).getText();
+        WebElement grandContainer = getMessage().findElement(By.xpath(GRAND_PARENT_XPATH));
+        String timeStamp = grandContainer.findElement(By.xpath(INNER_TIME_DATE_XPATH)).getText();
         messageSelectorClick();
         Pattern pattern = Pattern.compile(TODAY_TIME_FORMAT);
         Matcher matcher = pattern.matcher(timeStamp);
         if (matcher.find()) return matcher.group(1);
-        else                return ERROR_FILER;
+        else                return ERROR_FILLER;
     }
     public void messageSelectorClick(){
-        getMessage().findElement(By.xpath(String.format("//div[contains(@id,'%s')]/div/button", getMessage().getAttribute("id")))).click();
+        getMessage().findElement(By.xpath(String.format(MESSAGE_SELECTOR_XPATH, getMessage().getAttribute("id")))).click();
     }
     public WebElement getMessage()              { return message; }
     public void setMessage(WebElement message)  { this.message = message; }
     @Override
     public String toString() {
         try {
-            return String.format(FORMAT,getAuthor(),getTheme(),getTimeStamp());
+            return String.format(FORMAT, getAuthor(), getTheme(), getDateTimeStamp());
         }
         catch (Exception e)
         {

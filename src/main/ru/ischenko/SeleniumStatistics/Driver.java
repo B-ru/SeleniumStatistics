@@ -17,16 +17,16 @@ public class Driver {
         setDriver( driver );
     }
     public void Login( String[ ] args ){
-        getDriver().get( args[SITE] );
-        getDriver().findElement( By.id( "username" ) ).sendKeys( args[LOGIN] );
-        getDriver().findElement( By.id( "password" ) ).sendKeys( args[PASSWD] + Keys.ENTER);
+        getDriver().get( args[URL_IDX] );
+        getDriver().findElement( By.id( "username" ) ).sendKeys( args[LOGIN_IDX] );
+        getDriver().findElement( By.id( "password" ) ).sendKeys( args[PASSWD_IDX] + Keys.ENTER);
     }
     public void Wait( String amutliplier ) throws Exception{
-        new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class,'_lvv_11')]/div/div[contains(@tabindex,'-1')]")));
+        new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(WAIT_ELEMENT_XPATH)));
         Thread.sleep(Math.round( DELAY * Float.parseFloat(amutliplier) ) );
     }
     public List<WebElement> FindMailRecordsDiv(){
-        return driver.findElements(By.xpath("//div[contains(@autoid,'_lvv_9')]/div"));
+        return driver.findElements(By.xpath(MESSAGES_LIST_XPATH));
     }
     public void Close() throws Exception{
         Thread.sleep(DELAY);
