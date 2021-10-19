@@ -7,12 +7,12 @@ public class MailMessages {
     public MailMessages(List<WebElement> mails) {
         setMails(mails);
     }
-    public List<WebElement> getMails()              { return mails;         }
-    public void setMails(List<WebElement> mails)    { this.mails = mails;   }
     public void Print(){
         mails.forEach( message -> {
             if( !message.getAttribute("id").isEmpty( ) )
                 System.out.print( new MessageParser( message ) );
         });
     }
+    public List<WebElement> getMails()              { return mails;         }
+    public void setMails(List<WebElement> mails)    { this.mails = mails;   }
 }
