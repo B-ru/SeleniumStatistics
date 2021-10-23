@@ -15,7 +15,7 @@ public class Driver implements Iterator {
         WebDriver driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().setSize(new Dimension(1024,800));
-        driver.manage().window().setPosition(new Point(0,0));
+        driver.manage().window().setPosition(new Point(0,-1000));
         setDriver( driver );
     }
     public void Login( String[ ] args ){
@@ -54,10 +54,12 @@ public class Driver implements Iterator {
     public WebElement next(){
         WebElement newMessage;
         if("".equals(getMessageId())){ newMessage = driver.findElement( By.xpath( FIRST_MESSAGE_XPATH ) ); }
-        else{ newMessage = driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );}
+        else{
+            newMessage = driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );
+        }
         newMessage.click();
         try { Thread.sleep(10); } catch (Exception e) {System.err.println(e.getMessage());}
-        setMessageId(newMessage.getAttribute("data-convid"));
+        setMessageId(newMessage.getAttribute("id"));
         return newMessage;
     }
     public void Close(){

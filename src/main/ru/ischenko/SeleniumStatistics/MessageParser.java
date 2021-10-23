@@ -69,15 +69,18 @@ public class MessageParser {
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(bodyString);
         if(matcher.find()){
-            return String.format( "%-10.10s;%5.5s;%-30.30s",
+            return String.format( "%s %s;\"%s\"",
                     matcher.group(4).trim(),
-                    matcher.group(5).replace("."," ").trim().replace(" ",":"),
+                    matcher.group(5).replace("-",":").replace("."," ").trim().replace(" ",":"),
                     (matcher.group(10) != null?
                             ( matcher.group(10).matches(EMPTY_COMMENT_FORMAT)? EMPTY_COMMENT_FILLER: matcher.group(10).trim() ) :
                             EMPTY_COMMENT_FILLER
                     )
             );
-        } else return "";
+        } else return ";";
+    }
+    public String getDateTimeFromHeader(){
+        return getMessage().getAttribute("data-time");
     }
     public void messageSelectorClick(){
         getMessage().findElement(By.xpath(String.format(MESSAGE_SELECTOR_XPATH, getMessage().getAttribute("id")))).click();
@@ -87,7 +90,7 @@ public class MessageParser {
     @Override
     public String toString() {
         try {
-            return String.format(FORMAT, getAuthor(), getTheme(), getDateTimeStamp(), getMessageBody());
+            return String.format(FORMAT, getAuthor(), getTheme(), getDateTimeFromHeader(), getMessageBody());
         }
         catch (Exception e)
         {
