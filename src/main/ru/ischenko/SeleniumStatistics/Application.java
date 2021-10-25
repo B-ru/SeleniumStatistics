@@ -9,7 +9,7 @@ public class Application {
         Driver driver = new Driver( args[PATH_TO_DRIVER_IDX] );
         driver.Login( args );
         driver.Wait( args[DELAY_MULTIPLIER_IDX]);
-        System.out.println("person;theme;timestamp;customtimestamp;comment");
+        System.out.println("person;theme;timestamp;customtimestamp;comment;sys_notes");
         while(driver.hasNext()){
             System.out.println( new MessageParser( driver.next() ) );
         }

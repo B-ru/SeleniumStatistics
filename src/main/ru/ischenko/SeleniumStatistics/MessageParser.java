@@ -12,12 +12,13 @@ import static java.util.Locale.forLanguageTag;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
 public class MessageParser {
     private WebElement message;
-    private String author               = "";
-    private String theme                = "";
-    private String timeStamp            = "";
-    private String parsedMessageBody    = "";
-    private String customTimeStamp      = "";
-    private String comment              = "";
+    private String author               = EMPTY_FIELD_FILLER;
+    private String theme                = EMPTY_FIELD_FILLER;
+    private String timeStamp            = EMPTY_FIELD_FILLER;
+    private String parsedMessageBody    = EMPTY_FIELD_FILLER;
+    private String customTimeStamp      = EMPTY_FIELD_FILLER;
+    private String comment              = EMPTY_FIELD_FILLER;
+    private String sysNote              = EMPTY_FIELD_FILLER;
     public MessageParser(WebElement message){
         setMessage(message);
         setAuthor(parseAuthor());
@@ -80,23 +81,13 @@ public class MessageParser {
         String bodyString = Jsoup.parse(grandContainer.findElement(By.xpath(MESSAGE_BODY_XPATH)).getAttribute("innerHTML")).text();
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(bodyString);
-        //if(matcher.find()){
-        //    return String.format( "%s %s;%s",
-        //            matcher.group(DATE_IDX).trim(),
-        //            matcher.group(TIME_IDX).replace("-",":").replace("."," ").trim().replace(" ",":"),
-        //            (matcher.group(COMMENT_IDX) != null?
-        //                    ( matcher.group(10).matches(EMPTY_COMMENT_FORMAT)? EMPTY_COMMENT_FILLER: "\"" + matcher.group(10).trim() + "\"" ) :
-        //                    EMPTY_COMMENT_FILLER
-        //            )
-        //    );
-        //} else
-        return bodyString;
+        if(matcher.find()){
+            return bodyString;
+        } else
+        return EMPTY_FIELD_FILLER;
     }
     public String parseDateTimeFromHeader(){
         return getMessage().getAttribute("data-time");
-    }
-    public void messageSelectorClick(){
-        getMessage().findElement(By.xpath(String.format(MESSAGE_SELECTOR_XPATH, getMessage().getAttribute("id")))).click();
     }
     public String parseCustomTimeStamp(){
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
@@ -109,8 +100,13 @@ public class MessageParser {
             pattern = Pattern.compile(CUSTOM_TIMESTAMP_PATTERN);
             matcher = pattern.matcher(customTimeStamp);
             if(matcher.find()){
-                return customTimeStamp;
-            } else return EMPTY_FIELD_FILLER;
+                if(matcher.group(4).matches("^\\d\\d$")){
+                    return (matcher.group(1) + ".20" + matcher.group(4)).replace("/", ".");
+                }else return customTimeStamp.replace("/", ".");
+            } else {
+                setSysNote(getSysNote() + CUSTOM_TIMESTAMP_ERROR);
+                return EMPTY_FIELD_FILLER;
+            }
         }
         return EMPTY_FIELD_FILLER;
     }
@@ -129,7 +125,7 @@ public class MessageParser {
     @Override
     public String toString() {
         try {
-            return String.format(FORMAT, getAuthor(), getTheme(), getTimeStamp(), getCustomTimeStamp(), getComment());
+            return String.format(FORMAT, getAuthor(), getTheme(), getTimeStamp(), getCustomTimeStamp(), getComment(), getSysNote());
         }
         catch (Exception e)
         {
@@ -151,4 +147,6 @@ public class MessageParser {
     public void setComment(String comment)                      { this.comment = comment; }
     public String getParsedMessageBody()                        { return parsedMessageBody; }
     public void setParsedMessageBody(String parsedMessageBody)  { this.parsedMessageBody = parsedMessageBody; }
+    public String getSysNote()                                  { return sysNote; }
+    public void setSysNote(String sysNote)                      { this.sysNote = sysNote; }
 }
