@@ -12,13 +12,25 @@ import static java.util.Locale.forLanguageTag;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
 public class MessageParser {
     private WebElement message;
+    private String author               = "";
+    private String theme                = "";
+    private String timeStamp            = "";
+    private String parsedMessageBody    = "";
+    private String customTimeStamp      = "";
+    private String comment              = "";
     public MessageParser(WebElement message){
         setMessage(message);
+        setAuthor(parseAuthor());
+        setTheme(parseTheme());
+        setTimeStamp(parseDateTimeFromHeader());
+        setParsedMessageBody(parseMessageBody());
+        setCustomTimeStamp(parseCustomTimeStamp());
+        setComment(parseComment());
     }
-    public String getAuthor()   {
+    public String parseAuthor()   {
         return getMessage().findElement(By.xpath(String.format(AUTHOR_XPATH, getMessage().getAttribute("id")))).getText();
     }
-    public String getTheme()    {
+    public String parseTheme()    {
         return getMessage().findElement(By.xpath(String.format(THEME_XPATH, getMessage().getAttribute("id")))).getText();
     }
     public String getDateTimeStamp() throws Exception{  //TODO: must be a better way: program compiles pattern on every message parsing, while it has to do it once
@@ -42,7 +54,7 @@ public class MessageParser {
             if (matcher.find()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate messageDate = LocalDate.parse(matcher.group(2) + "." + currentDate.getYear(), formatter);
-                return String.format(DATE_OUTPUT_FORMAT, messageDate,getTimeStampFromMessageBody());
+                return String.format(DATE_OUTPUT_FORMAT, messageDate, parseTimeStampFromMessageBody());
             }
         } else if (messageTimeStamp.matches(MONTH_TIME_FORMAT)){
             Pattern pattern = Pattern.compile(MONTH_TIME_FORMAT);
@@ -50,12 +62,12 @@ public class MessageParser {
             if (matcher.find()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate messageDate = LocalDate.parse( matcher.group(1),formatter );
-                return  String.format(DATE_OUTPUT_FORMAT, messageDate, getTimeStampFromMessageBody() );
+                return  String.format(DATE_OUTPUT_FORMAT, messageDate, parseTimeStampFromMessageBody() );
             }
         }
         return messageTimeStamp;
     }
-    public String getTimeStampFromMessageBody(){
+    public String parseTimeStampFromMessageBody(){
         WebElement grandContainer = getMessage().findElement(By.xpath(GRAND_PARENT_XPATH));
         String timeStamp = grandContainer.findElement(By.xpath(INNER_TIME_DATE_XPATH)).getText();
         Pattern pattern = Pattern.compile(RECENT_TIME_FORMAT);
@@ -63,34 +75,61 @@ public class MessageParser {
         if (matcher.find()) return matcher.group(1);
         else                return ERROR_FILLER;
     }
-    public String getMessageBody(){
+    public String parseMessageBody(){
         WebElement grandContainer = getMessage().findElement(By.xpath(GRAND_PARENT_XPATH));
         String bodyString = Jsoup.parse(grandContainer.findElement(By.xpath(MESSAGE_BODY_XPATH)).getAttribute("innerHTML")).text();
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(bodyString);
-        if(matcher.find()){
-            return String.format( "%s %s;\"%s\"",
-                    matcher.group(4).trim(),
-                    matcher.group(5).replace("-",":").replace("."," ").trim().replace(" ",":"),
-                    (matcher.group(10) != null?
-                            ( matcher.group(10).matches(EMPTY_COMMENT_FORMAT)? EMPTY_COMMENT_FILLER: matcher.group(10).trim() ) :
-                            EMPTY_COMMENT_FILLER
-                    )
-            );
-        } else return ";";
+        //if(matcher.find()){
+        //    return String.format( "%s %s;%s",
+        //            matcher.group(DATE_IDX).trim(),
+        //            matcher.group(TIME_IDX).replace("-",":").replace("."," ").trim().replace(" ",":"),
+        //            (matcher.group(COMMENT_IDX) != null?
+        //                    ( matcher.group(10).matches(EMPTY_COMMENT_FORMAT)? EMPTY_COMMENT_FILLER: "\"" + matcher.group(10).trim() + "\"" ) :
+        //                    EMPTY_COMMENT_FILLER
+        //            )
+        //    );
+        //} else
+        return bodyString;
     }
-    public String getDateTimeFromHeader(){
+    public String parseDateTimeFromHeader(){
         return getMessage().getAttribute("data-time");
     }
     public void messageSelectorClick(){
         getMessage().findElement(By.xpath(String.format(MESSAGE_SELECTOR_XPATH, getMessage().getAttribute("id")))).click();
     }
-    public WebElement getMessage()              { return message; }
-    public void setMessage(WebElement message)  { this.message = message; }
+    public String parseCustomTimeStamp(){
+        Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
+        Matcher matcher = pattern.matcher(getParsedMessageBody());
+        if(matcher.find()){
+            String customTimeStamp = String.format( "%s %s",
+                matcher.group(DATE_IDX).trim(),
+                matcher.group(TIME_IDX).replace("-",":").replace("."," ").trim().replace(" ",":")
+            );
+            pattern = Pattern.compile(CUSTOM_TIMESTAMP_PATTERN);
+            matcher = pattern.matcher(customTimeStamp);
+            if(matcher.find()){
+                return customTimeStamp;
+            } else return EMPTY_FIELD_FILLER;
+        }
+        return EMPTY_FIELD_FILLER;
+    }
+    public String parseComment(){
+        Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
+        Matcher matcher = pattern.matcher(getParsedMessageBody());
+        if(matcher.find()){
+            return String.format( "%s",
+                (matcher.group(COMMENT_IDX) != null?
+                    ( matcher.group(COMMENT_IDX).matches(EMPTY_COMMENT_FORMAT)? EMPTY_FIELD_FILLER : matcher.group(COMMENT_IDX).trim() ) :
+                        EMPTY_FIELD_FILLER
+                )
+            );
+        } else return EMPTY_FIELD_FILLER;
+    }
     @Override
     public String toString() {
         try {
-            return String.format(FORMAT, getAuthor(), getTheme(), getDateTimeFromHeader(), getMessageBody());
+            return String.format(FORMAT, getAuthor(), getTheme(), getTimeStamp(), getCustomTimeStamp(), getComment());
         }
         catch (Exception e)
         {
@@ -98,4 +137,18 @@ public class MessageParser {
         }
         return null;
     }
+    public WebElement getMessage()                              { return message; }
+    public void setMessage(WebElement message)                  { this.message = message; }
+    public void setAuthor(String author)                        { this.author = author; }
+    public String getAuthor()                                   { return author; }
+    public void setTheme(String theme)                          { this.theme = theme; }
+    public String getTheme()                                    { return theme; }
+    public String getTimeStamp()                                { return timeStamp; }
+    public void setTimeStamp(String timeStamp)                  { this.timeStamp = timeStamp; }
+    public String getCustomTimeStamp()                          { return customTimeStamp; }
+    public void setCustomTimeStamp(String customTimeStamp)      { this.customTimeStamp = customTimeStamp; }
+    public String getComment()                                  { return comment; }
+    public void setComment(String comment)                      { this.comment = comment; }
+    public String getParsedMessageBody()                        { return parsedMessageBody; }
+    public void setParsedMessageBody(String parsedMessageBody)  { this.parsedMessageBody = parsedMessageBody; }
 }

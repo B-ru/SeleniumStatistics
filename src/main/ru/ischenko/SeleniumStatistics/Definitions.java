@@ -18,7 +18,7 @@ public class Definitions {
     final static String MESSAGES_LIST_XPATH     = "//*[contains(@class,'_lvv_12')]//div[@data-convid]";
     final static String FIRST_MESSAGE_XPATH     = "//*[contains(@class,'_lvv_12')]//div[@data-convid]";
     final static String NEXT_MESSAGE_XPATH      = "//div[contains(@aria-selected,'true')]/following-sibling::div[@data-convid]";
-    final static String FORMAT                  = "\"%s\";\"%s\";%s;%s";
+    final static String FORMAT                  = "\"%s\";\"%s\";%s;%s;%s";
     final static String FORMAT_A                = "%-33.33s;%-29.29s;%25.25s;%-80.80s";
     final static String DATE_OUTPUT_FORMAT      = "%s %s";
     final static String DATE_OUTPUT_FORMAT_A    = "%10.10s %5.5s";
@@ -39,5 +39,11 @@ public class Definitions {
     final static String MESSAGE_BODY_XPATH_A    = "//div[contains(@class,'_rp_S4')]/following-sibling::div[@class]/div[contains(@role,'document')]/div[3]";
     final static String BODY_DATA_PATTERN       = "[дД]ата(( )?:( )?)?([0-9./]+).+[вВ]ремя[а-яА-Я :]+:?([0-9.:\\-]+) ([кК]ом[а-я]+рий(( )?:( )?)?([а-яА-Я0-9.,\\- ]+)[сС] уваж)?";
     final static String EMPTY_COMMENT_FORMAT    = "^[-]+( )?";
-    final static String EMPTY_COMMENT_FILLER    = "";
+    final static String EMPTY_FIELD_FILLER      = "";
+    // Matches groups indexes:
+    final static int DATE_IDX                   = 4;
+    final static int TIME_IDX                   = 5;
+    final static int COMMENT_IDX                = 10;
+    final static String CUSTOM_TIMESTAMP_PATTERN= "[0-9]([0-9])?\\.[0-9]([0-9])?\\.[0-9][0-9][0-9][0-9] [0-9]([0-9])?:[0-9][0-9]";
+
 }
