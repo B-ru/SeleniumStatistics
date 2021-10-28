@@ -15,7 +15,7 @@ public class Driver implements Iterator {
         WebDriver driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().setSize(new Dimension(1024,800));
-        driver.manage().window().setPosition(new Point(0,-1000));
+        driver.manage().window().setPosition(new Point(3000,0));
         setDriver( driver );
     }
     public void Login( String[ ] args ){
@@ -26,9 +26,6 @@ public class Driver implements Iterator {
     public void Wait( String amutliplier ) throws Exception{
         new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(WAIT_ELEMENT_XPATH)));
         Thread.sleep(Math.round( DELAY * Float.parseFloat(amutliplier) ) );
-    }
-    public List<WebElement> FindMailRecordsDiv(){
-        return driver.findElements(By.xpath(MESSAGES_LIST_XPATH));
     }
     @Override
     public boolean hasNext() {
@@ -53,12 +50,10 @@ public class Driver implements Iterator {
     @Override
     public WebElement next(){
         WebElement newMessage;
-        if("".equals(getMessageId())){ newMessage = driver.findElement( By.xpath( FIRST_MESSAGE_XPATH ) ); }
-        else{
-            newMessage = driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );
-        }
+        if("".equals(getMessageId()))newMessage = driver.findElement( By.xpath( FIRST_MESSAGE_XPATH ) );
+        else newMessage = driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );
         newMessage.click();
-        try { Thread.sleep(10); } catch (Exception e) {System.err.println(e.getMessage());}
+        try { Thread.sleep(CLICK_DELAY); } catch (Exception e) {System.err.println(e.getMessage());}
         setMessageId(newMessage.getAttribute("id"));
         return newMessage;
     }
