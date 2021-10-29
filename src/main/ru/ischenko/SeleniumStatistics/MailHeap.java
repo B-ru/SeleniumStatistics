@@ -22,9 +22,9 @@ public class MailHeap implements Iterator {
         getDriver().findElement( By.id( "username" ) ).sendKeys( args[LOGIN_IDX] );
         getDriver().findElement( By.id( "password" ) ).sendKeys( args[PASSWD_IDX] + Keys.ENTER);
     }
-    public void WaitForLoading(String amutliplier ) throws Exception{
+    public void WaitForLoading(String multiplier ) throws Exception{
         new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(WAIT_ELEMENT_XPATH)));
-        Thread.sleep(Math.round( DELAY * Float.parseFloat(amutliplier) ) );
+        Thread.sleep(Math.round( DELAY * Float.parseFloat(multiplier) ) );
     }
     @Override
     public boolean hasNext() {
@@ -38,7 +38,7 @@ public class MailHeap implements Iterator {
             }
         } else {
             try {
-                driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );
+                driver.findElement( By.xpath( NEXT_MESSAGE_XPATH ) );
                 return true;
             }
             catch (Exception e) {
@@ -50,7 +50,7 @@ public class MailHeap implements Iterator {
     public WebElement next(){
         WebElement newMessage;
         if("".equals(getMessageId()))newMessage = driver.findElement( By.xpath( FIRST_MESSAGE_XPATH ) );
-        else newMessage = driver.findElement( By.xpath( String.format( NEXT_MESSAGE_XPATH,getMessageId() ) ) );
+        else newMessage = driver.findElement( By.xpath( NEXT_MESSAGE_XPATH ) );
         newMessage.click();
         try { Thread.sleep(CLICK_DELAY); } catch (Exception e) {System.err.println(e.getMessage());}
         setMessageId(newMessage.getAttribute("id"));
