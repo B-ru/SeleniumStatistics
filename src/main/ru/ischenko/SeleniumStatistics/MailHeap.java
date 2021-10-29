@@ -4,7 +4,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
 public class MailHeap implements Iterator {
