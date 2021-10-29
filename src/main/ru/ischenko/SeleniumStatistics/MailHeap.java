@@ -18,12 +18,12 @@ public class MailHeap implements Iterator {
         driver.manage().window().setPosition(new Point(3000,0));
         setDriver( driver );
     }
-    public void Login( String[ ] args ){
+    public void Authorise(String[ ] args ){
         getDriver().get( args[URL_IDX] );
         getDriver().findElement( By.id( "username" ) ).sendKeys( args[LOGIN_IDX] );
         getDriver().findElement( By.id( "password" ) ).sendKeys( args[PASSWD_IDX] + Keys.ENTER);
     }
-    public void Wait( String amutliplier ) throws Exception{
+    public void WaitForLoading(String amutliplier ) throws Exception{
         new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(WAIT_ELEMENT_XPATH)));
         Thread.sleep(Math.round( DELAY * Float.parseFloat(amutliplier) ) );
     }

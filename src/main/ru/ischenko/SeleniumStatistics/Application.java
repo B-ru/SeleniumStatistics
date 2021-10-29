@@ -2,8 +2,8 @@ package main.ru.ischenko.SeleniumStatistics;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
 public class Application {
     public static void setup(String[] args, MailHeap mailHeap) throws  Exception{
-        mailHeap.Login( args );
-        mailHeap.Wait( args[DELAY_MULTIPLIER_IDX]);
+        mailHeap.Authorise( args );
+        mailHeap.WaitForLoading( args[DELAY_MULTIPLIER_IDX]);
     }
     public static void printAndArchiveMails(MailHeap mailHeap){
         System.out.println(HEADER);
