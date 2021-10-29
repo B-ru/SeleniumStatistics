@@ -56,7 +56,7 @@ public class MailHeap implements Iterator {
         setMessageId(newMessage.getAttribute("id"));
         return newMessage;
     }
-    public void Close(){
+    public void Leave(){
         driver.quit();
     }
     public WebDriver getDriver()                        { return driver;                        }
