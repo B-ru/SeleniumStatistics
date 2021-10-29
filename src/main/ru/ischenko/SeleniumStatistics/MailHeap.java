@@ -7,10 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
-public class Driver implements Iterator {
+public class MailHeap implements Iterator {
     private WebDriver   driver;
     private String      messageId = "";
-    public Driver( String path ){
+    public MailHeap(String path ){
         System.setProperty( "webdriver.gecko.driver", path );
         WebDriver driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

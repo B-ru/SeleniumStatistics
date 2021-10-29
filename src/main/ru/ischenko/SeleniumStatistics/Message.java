@@ -82,7 +82,7 @@ public class Message {
         } else return EMPTY_FIELD_FILLER;
     }
     public void archive(){
-
+        getMessage().findElement(By.xpath(ARCHIVE_BUTTON_XPATH)).click();
     }
     @Override
     public String toString() {

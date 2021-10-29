@@ -28,4 +28,5 @@ public class Definitions {
     final static String EMPTY_FIELD_FILLER      = "";
     final static String CUSTOM_TIMESTAMP_PATTERN= "([0-9]([0-9])?[\\.\\/][0-9]([0-9])?)[\\.\\/]([0-9][0-9]([0-9][0-9])?) ([0-9]([0-9])?:[0-9][0-9])";
     final static String CUSTOM_TIMESTAMP_ERROR  = "неверный формат даты/времени";
+    final static String ARCHIVE_BUTTON_XPATH      = "./../../../../../../../../../../../../../../../div[1]//button[contains(@aria-label, 'Архивировать (E)')]";
 }
