@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static main.ru.ischenko.SeleniumStatistics.Definitions.*;
-public class MessageParser {
+public class Message {
     private WebElement message;
     private String author               = EMPTY_FIELD_FILLER;
     private String theme                = EMPTY_FIELD_FILLER;
@@ -14,7 +14,7 @@ public class MessageParser {
     private String customTimeStamp      = EMPTY_FIELD_FILLER;
     private String comment              = EMPTY_FIELD_FILLER;
     private String sysNote              = EMPTY_FIELD_FILLER;
-    public MessageParser(WebElement message){
+    public Message(WebElement message){
         setMessage(message);
         setAuthor(parseAuthor());
         setTheme(parseTheme());
@@ -80,6 +80,9 @@ public class MessageParser {
                 )
             );
         } else return EMPTY_FIELD_FILLER;
+    }
+    public void archive(){
+
     }
     @Override
     public String toString() {

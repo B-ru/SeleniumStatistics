@@ -13,6 +13,7 @@ public class Definitions {
     //regular values
     final static int    DELAY                   = 5000;
     final static int    CLICK_DELAY             = 350;
+    final static String HEADER                  = "person;theme;timestamp;customtimestamp;comment;sys_notes";
     final static String WAIT_ELEMENT_XPATH      = "//div[contains(@class,'_lvv_12')]";
     final static String FIRST_MESSAGE_XPATH     = "//*[contains(@class,'_lvv_12')]//div[@data-convid]";
     final static String NEXT_MESSAGE_XPATH      = "//div[contains(@aria-selected,'true')]/following-sibling::div[@data-convid]";

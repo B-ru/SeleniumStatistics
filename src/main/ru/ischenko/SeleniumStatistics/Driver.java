@@ -13,7 +13,7 @@ public class Driver implements Iterator {
     public Driver( String path ){
         System.setProperty( "webdriver.gecko.driver", path );
         WebDriver driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().setSize(new Dimension(1024,800));
         driver.manage().window().setPosition(new Point(3000,0));
         setDriver( driver );
@@ -64,4 +64,5 @@ public class Driver implements Iterator {
     public void setDriver(WebDriver driver)             { this.driver = driver;                 }
     public String getMessageId()                        { return messageId;                     }
     public void setMessageId(String messageId)          { this.messageId = messageId;           }
+    public void resetMessagePointer()                   { setMessageId("");                     }
 }
