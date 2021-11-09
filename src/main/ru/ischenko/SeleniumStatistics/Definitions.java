@@ -10,7 +10,7 @@ public class Definitions {
     final static int    DATE_IDX                = 4;
     final static int    TIME_IDX                = 5;
     final static int    COMMENT_IDX             = 10;
-    //regular values
+    // regular values
     final static int    DELAY                   = 5000;
     final static int    CLICK_DELAY             = 350;
     final static String HEADER                  = "person;theme;timestamp;customtimestamp;comment;sys_notes";
@@ -23,7 +23,7 @@ public class Definitions {
     final static String THEME_XPATH             = "//div[contains(@class,'_rp_m5')]//span[contains(@autoid,'_rp_B')]";
     final static String GRAND_PARENT_XPATH      = "./../../../../../../../../../../../../..";
     final static String MESSAGE_BODY_XPATH      = "//div[contains(@id,'Item.MessageNormalizedBody')]/div/div[1]";
-    final static String BODY_DATA_PATTERN       = "[дД]ата(( )?:( )?)?([0-9\\.\\/]+).+[вВ]ремя[а-яА-Я :]+:?([0-9.:\\-]+) ([кК]ом[а-я]+рий(( )?:( )?)?([а-яА-Я0-9.,\\- ]+)[сС] уваж)?";
+    final static String BODY_DATA_PATTERN       = "[дД]ата(( )?:( )?)?([0-9./]+).*[вВ]ремя[а-яА-Я :.]*([0-9]{1,2}[,\\-.:][0-9]{2})(.*[кК]ом[а-я]+рий(( )?:( )?)?([а-яА-Я0-9.,\\- ]+)[сС] уваж)?";
     final static String EMPTY_COMMENT_FORMAT    = "^[-]+( )?";
     final static String EMPTY_FIELD_FILLER      = "";
     final static String CUSTOM_TIMESTAMP_PATTERN= "([0-9]([0-9])?[\\.\\/][0-9]([0-9])?)[\\.\\/]([0-9][0-9]([0-9][0-9])?) ([0-9]([0-9])?:[0-9][0-9])";

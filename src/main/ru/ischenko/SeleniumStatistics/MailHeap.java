@@ -14,7 +14,7 @@ public class MailHeap implements Iterator {
         WebDriver driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().setSize(new Dimension(1024,800));
-        driver.manage().window().setPosition(new Point(3000,0));
+        driver.manage().window().setPosition(new Point(0,0));
         setDriver( driver );
     }
     public void Authorise(String[ ] args ){

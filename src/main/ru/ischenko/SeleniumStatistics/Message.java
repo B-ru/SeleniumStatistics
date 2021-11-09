@@ -51,6 +51,7 @@ public class Message {
     public String parseCustomTimeStamp(){
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(getParsedMessageBody());
+        //TODO: refactor parseCustomTimeStamp(), clean it
         if(matcher.find()){
             String customTimeStamp = String.format( "%s %s",
                 matcher.group(DATE_IDX).trim(),

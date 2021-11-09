@@ -10,8 +10,8 @@ public class Application {
         while ( mailHeap.hasNext() ) {
             Message message = new Message( mailHeap.next() );
             System.out.println( message );
-            message.archive();
-            mailHeap.resetMessagePointer();
+            //message.archive();
+            //mailHeap.resetMessagePointer();
         }
     }
     public static void main( String[] args ) throws Exception {
