@@ -49,38 +49,43 @@ public class Message {
         return getMessage().getAttribute("data-time");
     }
     public String parseCustomTimeStamp(){
+        String parsedCustomTimeStamp = EMPTY_FIELD_FILLER;
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(getParsedMessageBody());
         //TODO: refactor parseCustomTimeStamp(), clean it
         if(matcher.find()){
-            String customTimeStamp = String.format( "%s %s",
+            parsedCustomTimeStamp = String.format( "%s %s",
                 matcher.group(DATE_IDX).trim(),
                 matcher.group(TIME_IDX).replace("-",":").replace("."," ").trim().replace(" ",":")
             );
             pattern = Pattern.compile(CUSTOM_TIMESTAMP_PATTERN);
-            matcher = pattern.matcher(customTimeStamp);
+            matcher = pattern.matcher(parsedCustomTimeStamp);
+            ////
             if(matcher.find()){
                 if(matcher.group(4).matches("^\\d\\d$")){
-                    return (matcher.group(1) + ".20" + matcher.group(4)).replace("/", ".") + " " + matcher.group(6);
-                }else return customTimeStamp.replace("/", ".");
+                    parsedCustomTimeStamp = (matcher.group(1) + ".20" + matcher.group(4)).replace("/", ".") + " " + matcher.group(6);
+                }else
+                    parsedCustomTimeStamp =  parsedCustomTimeStamp.replace("/", ".");
             } else {
                 setSysNote(getSysNote() + CUSTOM_TIMESTAMP_ERROR);
-                return EMPTY_FIELD_FILLER;
+                parsedCustomTimeStamp = EMPTY_FIELD_FILLER;
             }
         }
-        return EMPTY_FIELD_FILLER;
+        return parsedCustomTimeStamp.replaceAll("[.\\-_]{2,}","");
     }
     public String parseComment(){
+        String parsedComment = EMPTY_FIELD_FILLER;
         Pattern pattern = Pattern.compile(BODY_DATA_PATTERN);
         Matcher matcher = pattern.matcher(getParsedMessageBody());
         if(matcher.find()){
-            return String.format( "%s",
+            parsedComment = String.format( "%s",
                 (matcher.group(COMMENT_IDX) != null?
                     ( matcher.group(COMMENT_IDX).matches(EMPTY_COMMENT_FORMAT)? EMPTY_FIELD_FILLER : matcher.group(COMMENT_IDX).trim() ) :
                         EMPTY_FIELD_FILLER
                 )
             );
-        } else return EMPTY_FIELD_FILLER;
+        }
+        return parsedComment.replaceAll("[.\\-_]{2,}","");
     }
     public void archive(){
         getMessage().findElement(By.xpath(ARCHIVE_BUTTON_XPATH)).click();
